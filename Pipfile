@@ -39,7 +39,8 @@ gunicorn = "*"
 whitenoise = "*"
 psutil = "*"
 ipython = "*"
-
+social-auth-app-django = "*"
+djangorestframework = "*"
 
 [requires]
 
