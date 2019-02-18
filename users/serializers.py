@@ -10,9 +10,9 @@ class SocialUserSerializer(serializers.ModelSerializer):
         model = UserSocialAuth
         fields = ('extra_data',)
 
-    def get_extra_data(self, cls):
-        if cls.first():
-            return cls.first().extra_data
+    def get_extra_data(self, obj):
+        if obj.first():
+            return obj.first().extra_data
         return {}
 
 class UserSerializer(serializers.ModelSerializer):
