@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+from django.db import transaction
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -28,10 +29,22 @@ class RepositoryViewSet(viewsets.ModelViewSet):
         serializer = CommitSerializer(commits_data, many=True)
         return Response(serializer.data)
 
-    def create(self, request, *args, **kwargs):
-        repository = super(RepositoryViewSet, self).create(request, *args, **kwargs)
-        repository_commits = GitService.get_repository_commits(repository.name, repository.owner)
-        return repository
+    def perform_create(self, serializer):
+        repository = serializer.save()
+        access_token = self.request.user.social_auth.get(provider ='github').extra_data['access_token']
+        repository_commits = GitService().get_repository_commits(repository.name, repository.owner, access_token)
+        if repository_commits: 
+            with transaction.atomic():
+                Commit.objects.bulk_create([
+                    Commit(
+                        sha = commit['sha'],
+                        author = commit['author'],
+                        message = commit['message'],
+                        repository = repository,
+                        date = commit['date']
+                    )
+                    for commit in repository_commits
+                ])
 
 
 class CommitViewSet(viewsets.ModelViewSet):

@@ -4,20 +4,28 @@ import requests
 
 
 class GitService:
-    url = 'https://api.github.com/repos/'
+    URL = 'https://api.github.com'
 
     def get_headers(self, token):
         return {
             'content-type': 'application/json; charset=utf-8',
             'authorization': f'token {token}'
         }
+    
+    def get_repository(self, repository, owner, token):
+        repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}', headers = self.get_headers(token))
+        if repo_request:
+            return repo_request.json()
+        return None 
 
-    def get_repository(self, repository, token): 
-        owner, repository_name = repository.split('/')
-        repo_request = requests.get(f'{url}/{owner}/{repository_name}', header = get_headers())
-        return repo_request.json
-
-    def get_repository_commits(self, repository):
-        payload = {'since': datetime.today() - datetime.timedelta(days - 30)}
-        commits_request = requests.get(f'{url}/repos/{repository}/commits', header = get_headers(), params = payload)
-        return commits_request
+    def get_repository_commits(self, repository, owner, token):
+        payload = {'since': datetime.today() - timedelta(days = 30)}
+        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/commits', headers = self.get_headers(token), params = payload)
+        if commits_request:
+            return  [{
+            'sha': commit['sha'],
+            'author': commit['commit']['author']['name'],
+            'message': commit['commit']['message'],
+            'date': commit['commit']['author']['date']
+            } for commit in commits_request.json()]
+        return None
