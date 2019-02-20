@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'import_export',
     'social_django',
     'rest_framework',
+    'rest_framework.authtoken',
     'common',
     'users',
     'repositories'
@@ -101,6 +102,9 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.DjangoModelPermissions',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
     )
 }
 

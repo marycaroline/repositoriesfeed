@@ -223,7 +223,6 @@
         },
         "et-xmlfile": {
             "hashes": [
-                "sha256:21cf3f401926cab564e83820748cc475167b49b50a909b551cc5151000e9a050",
                 "sha256:614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b"
             ],
             "version": "==1.0.1"
@@ -245,11 +244,11 @@
         },
         "ipython": {
             "hashes": [
-                "sha256:6a9496209b76463f1dec126ab928919aaf1f55b38beb9219af3fe202f6bbdd12",
-                "sha256:f69932b1e806b38a7818d9a1e918e5821b685715040b48e59c657b3c7961b742"
+                "sha256:06de667a9e406924f97781bda22d5d76bfb39762b678762d86a466e63f65dc39",
+                "sha256:5d3e020a6b5f29df037555e5c45ab1088d6a7cf3bd84f47e0ba501eeb0c3ec82"
             ],
             "index": "pypi",
-            "version": "==7.2.0"
+            "version": "==7.3.0"
         },
         "ipython-genutils": {
             "hashes": [
@@ -446,10 +445,10 @@
         },
         "redis": {
             "hashes": [
-                "sha256:74c892041cba46078ae1ef845241548baa3bd3634f9a6f0f952f006eb1619c71",
-                "sha256:7ba8612bbfd966dea8c62322543fed0095da2834dbd5a7c124afbc617a156aa7"
+                "sha256:724932360d48e5407e8f82e405ab3650a36ed02c7e460d1e6fddf0f038422b54",
+                "sha256:9b19425a38fd074eb5795ff2b0d9a55b46a44f91f5347995f27e3ad257a7d775"
             ],
-            "version": "==3.1.0"
+            "version": "==3.2.0"
         },
         "requests": {
             "hashes": [
@@ -806,11 +805,11 @@
         },
         "pre-commit": {
             "hashes": [
-                "sha256:40bc3f3a56402d73c54db2dc855fccfb2e7b1b8136da29c61470c1d999614060",
-                "sha256:dfca349528e1b1272bc35511e4375d8bb01d4b0dec5eb632e0cf2d7e7458fecc"
+                "sha256:d3d69c63ae7b7584c4b51446b0b583d454548f9df92575b2fe93a68ec800c4d3",
+                "sha256:fc512f129b9526e35e80d656a16a31c198f584c4fce3a5c739045b5140584917"
             ],
             "index": "pypi",
-            "version": "==1.14.3"
+            "version": "==1.14.4"
         },
         "prospector": {
             "extras": [
