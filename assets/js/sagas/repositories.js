@@ -1,14 +1,9 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { FETCH_REPOSITORIES_REQUEST, FETCH_REPOSITORIES_SUCCESS, FETCH_REPOSITORIES_FAILURE } from 'constants/index.js';
+import { FETCH_REPOSITORIES_REQUEST, FETCH_REPOSITORIES_SUCCESS, FETCH_REPOSITORIES_FAILURE } from 'constants/repositories';
+import { fetchRepositories } from 'services/repositories';
 
-// watcher saga: watches for actions dispatched to the store, starts worker saga
 export function* repositoriesSaga() {
-  yield takeLatest(FETCH_REPOSITORIES_REQUEST, getDogs);
-}
-
-// function that makes the api request and returns a Promise for response
-function fetchRepositories() {
-  return fetch("https://dog.ceo/api/breed/hound/images")
+  yield takeLatest(FETCH_REPOSITORIES_REQUEST, getRepositories);
 }
 
 function* getRepositories() {

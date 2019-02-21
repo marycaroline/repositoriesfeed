@@ -5,11 +5,10 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token
-
-
 
 from repositories.models import Commit, Repository
 from repositories.serializers import CommitSerializer, RepositorySerializer, RepositoryFindSerializer
@@ -77,7 +76,7 @@ class CommitViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Commit.objects.filter(repository__user = self.request.user)
 
-class ObtainToken(APIView):
+class ObtainToken(GenericAPIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
 

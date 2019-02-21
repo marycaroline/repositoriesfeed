@@ -6,5 +6,10 @@ export default {
   commits: {
     data: [],
     fetching: false
+  },
+  auth: {
+    email: '',
+    token: null,
+    id: 0
   }
 }

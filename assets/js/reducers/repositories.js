@@ -2,7 +2,7 @@ import {
   FETCH_REPOSITORIES_REQUEST,
   FETCH_REPOSITORIES_SUCCESS,
   FETCH_REPOSITORIES_FAILURE
-} from '../constants';
+} from 'constants/repositories';
 import initial from './initial';
 
 const repositories = (state = initial.repositories, action) => {

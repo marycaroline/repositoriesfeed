@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { FETCH_REPOSITORIES_REQUEST } from 'constants/index.js';
+import { FETCH_REPOSITORIES_REQUEST } from 'constants/repositories';
 
 class RepositoriesContainer extends Component {
 
@@ -8,7 +8,9 @@ class RepositoriesContainer extends Component {
     const { fetching, repositories } = this.props;
     return (
       <div>
-
+        {repositories.map(repository => {
+          <h1>{repository.name}</h1>
+        })}
 
       </div>
     )

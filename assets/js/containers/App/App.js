@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import NavigationDrawer from 'react-md/lib/NavigationDrawers';
 import NavLink from 'app/repositories/components/NavLink';
+import { FETCH_TOKEN_REQUEST } from 'constants/auth';
+import { connect } from "react-redux";
 import Home from 'pages/Home';
 import './style.scss';
 
@@ -15,6 +17,12 @@ const navItems = [{
 
 
 class App extends Component {
+
+  
+  componentDidMount() {
+    this.props.getToken()
+  }
+  
   render() {
     return (
       <Route
@@ -36,4 +44,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getToken: () => dispatch({ type: FETCH_TOKEN_REQUEST })
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
