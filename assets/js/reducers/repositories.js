@@ -1,35 +1,31 @@
 import {
-  FOLLOW_REPOSITORY_REQUEST,
-  FOLLOW_REPOSITORY_SUCCESS,
-  FOLLOW_REPOSITORY_FAILURE
+  FETCH_REPOSITORIES_REQUEST,
+  FETCH_REPOSITORIES_SUCCESS,
+  FETCH_REPOSITORIES_FAILURE
 } from '../constants';
 import initial from './initial';
 
 const repositories = (state = initial.repositories, action) => {
   switch (action.type) {
-    case FOLLOW_REPOSITORY_REQUEST:
+    case FETCH_REPOSITORIES_REQUEST:
       return Object.assign({}, state, {
-        isFetching: true,
+        fetching: true,
         data: []
       })
-    case FOLLOW_REPOSITORY_SUCCESS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        data: [
+    case FETCH_REPOSITORIES_SUCCESS:
+    console.log(action);
+      return {
+        fetching: false,
+        data: {
           ...state.data,
-          {
-            id: action.payload.id,
-            name: action.payload.name,
-            description: action.payload.description,
-            owner: action.payload.owner,
-            user: action.payload.user
-          }
-        ]
-      })
-    case FOLLOW_REPOSITORY_FAILURE:
-      return Object.assign({}, state, {
-        isFetching: false,
-      })
+          ...action.payload
+        }
+      }
+    case FETCH_REPOSITORIES_FAILURE:
+      return {
+        fetching: false,
+        data: []
+      }
     default:
       return state
   }

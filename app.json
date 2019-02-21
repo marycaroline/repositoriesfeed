@@ -8,6 +8,12 @@
     "ALLOWED_HOSTS": {
       "description": "Django ALLOWED_HOSTS setting, e.g.: .appname.herokuapp.com"
     },
+    "SOCIAL_AUTH_GITHUB_KEY": {
+      "description": "Github Key App"
+    },
+    "SOCIAL_AUTH_GITHUB_SECRET": {
+      "description": "Github App Secret"
+    },
     "DISABLE_COLLECTSTATIC": {
       "description": "Disables Heroku collectstatic",
       "value": "1"

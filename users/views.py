@@ -12,7 +12,6 @@ class LoginView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            print(request.user)
             return redirect("/home")
         return super(LoginView, self).get(request, *args, **kwargs)
 
