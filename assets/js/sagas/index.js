@@ -5,7 +5,7 @@ import { commitsSaga } from './commits';
 
 // combine all the module sagas
 export default function* rootSaga() {
-  yield all ([
+  yield all ([  
     authSaga(),
     repositoriesSaga(),
     commitsSaga()

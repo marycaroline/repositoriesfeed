@@ -7,7 +7,7 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        <CommitsContainer repository={this.props.match.params.id} />
+        <CommitsContainer repositoryId={this.props.match.params.id} />
       </div>
     )
   }

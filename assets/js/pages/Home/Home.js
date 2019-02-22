@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import RepositoriesContainer from 'containers/Repositories/Repositories';
+import CommitsContainer from 'containers/Commits';
+import RepositoriesForm from 'containers/RepositoriesForm';
 
 
 export default class Home extends Component {
   render() {
     return (
       <div>
-        <RepositoriesContainer />
+        <RepositoriesForm />
+        <CommitsContainer />
       </div>
     )
   }

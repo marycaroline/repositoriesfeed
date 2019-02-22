@@ -71,7 +71,7 @@ class CommitViewSet(viewsets.ModelViewSet):
     """
     serializer_class = CommitSerializer
     model = Commit
-    authentication_classes = (TokenAuthentication)
+    authentication_classes = (TokenAuthentication, )
 
     def get_queryset(self):
         return Commit.objects.filter(repository__user = self.request.user)

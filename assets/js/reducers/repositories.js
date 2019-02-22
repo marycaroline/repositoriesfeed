@@ -6,6 +6,8 @@ import {
 import initial from './initial';
 
 const repositories = (state = initial.repositories, action) => {
+  console.log(action);
+  
   switch (action.type) {
     case FETCH_REPOSITORIES_REQUEST:
       return {
