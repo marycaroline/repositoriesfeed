@@ -9,7 +9,6 @@ export default {
   },
   auth: {
     email: '',
-    token: null,
-    id: 0
+    token: null
   }
 }

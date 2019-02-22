@@ -5,19 +5,16 @@ import {
 import initial from './initial';
 
 const auth = (state = initial.auth, action) => {
-    console.log(action);
     switch (action.type) {
         case FETCH_TOKEN_SUCCESS:
             return {
-                email: action.payload.email,
-                token: action.payload.token,
-                id: action.payload.id
+                email: '',
+                token: action.payload
             }
         case FETCH_TOKEN_FAILURE:
             return {
                 email: '',
-                token: null,
-                id: 0
+                token: null
             }
         default:
             return state

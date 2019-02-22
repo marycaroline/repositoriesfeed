@@ -8,7 +8,6 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from rest_framework.authtoken.models import Token
 
 from repositories.models import Commit, Repository
 from repositories.serializers import CommitSerializer, RepositorySerializer, RepositoryFindSerializer
@@ -24,7 +23,7 @@ class RepositoryViewSet(viewsets.ModelViewSet):
     """
     serializer_class = RepositorySerializer
     model = Repository
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
 
     def get_queryset(self):
         return Repository.objects.filter(user = self.request.user)
@@ -38,7 +37,8 @@ class RepositoryViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
-        repository_name = request.data.get('repository')
+        print(request.data)
+        repository_name = request.data.get('name')
         repository_owner = request.data.get('owner')
         repository = GitService().get_repository(repository_name, repository_owner, self.request.user)
         if repository:
@@ -75,14 +75,3 @@ class CommitViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Commit.objects.filter(repository__user = self.request.user)
-
-class ObtainToken(GenericAPIView):
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, format=None):
-        token, created = Token.objects.get_or_create(user=request.user)
-        content = {
-            'token': token.key,
-        }
-        return Response(content)

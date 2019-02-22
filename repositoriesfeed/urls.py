@@ -10,8 +10,8 @@ from rest_framework import routers
 
 # from rest_framework.authtoken import views
 
-from repositories.views import CommitViewSet, RepositoryViewSet, ObtainToken
-from users.views import LoginView, UserViewSet
+from repositories.views import CommitViewSet, RepositoryViewSet
+from users.views import LoginView, UserViewSet, HomeView
 
 
 router = routers.DefaultRouter()
@@ -22,11 +22,10 @@ router.register(r'repositories', RepositoryViewSet, basename = 'repositories')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^jsreverse/$', django_js_reverse.views.urls_js, name='js_reverse'),
-    url(r'^$', RedirectView.as_view(url='home')),
-    url(r'^home/$', login_required(TemplateView.as_view(template_name='repositories/index.html')), name='home'),
+    url(r'^$', RedirectView.as_view(url='repositories')),
+    url(r'^repositories/', HomeView.as_view(), name='repositories'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    url(r'^token/$', ObtainToken.as_view(), name='token'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^api/', include(router.urls)),
 ]

@@ -28,7 +28,7 @@ class GitService:
         if commits_request:
             return  [{
             'sha': commit['sha'],
-            'author': commit['commit']['author']['name'],
+            'author': commit['commit']['committer']['name'],
             'message': commit['commit']['message'],
             'date': commit['commit']['author']['date']
             } for commit in commits_request.json()]
