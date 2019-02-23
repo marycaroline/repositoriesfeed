@@ -19,8 +19,3 @@ function* logout() {
     Cookies.remove('rfeedtoken');
     axios.get(Urls.logout());
 }
-
-export const logoutAction = () => {
-    return dispatch =>
-        axios.post(Urls.logout()).then(res => dispatch({ type: FETCH_TOKEN_FAILURE }));
-};

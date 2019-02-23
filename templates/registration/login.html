@@ -1,6 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
+{% extends 'base.html' %}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -11,7 +12,7 @@
 </head>
 
 <body>
-    <div class="card-login" style="margin: 0 auto">
+    <div class="card-login" style="margin: 0 auto;">
         <h3>RepositoriesFeed</h3>
         <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
     </div>

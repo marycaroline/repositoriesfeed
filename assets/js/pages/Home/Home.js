@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import RepositoriesForm from 'containers/RepositoriesForm';
-import CommitItem from 'app/repositories/components/CommitItem';
 import { connect } from "react-redux";
 import {
     List,
@@ -8,7 +6,9 @@ import {
 } from 'react-md';
 import { FETCH_COMMITS_REQUEST } from 'constants/commits';
 import { FETCH_REPOSITORIES_REQUEST, FOLLOW_REPOSITORY_REQUEST } from 'constants/repositories';
-import RepositoryCard from '../../app/repositories/components/RepositoryCard';
+import CommitItem from 'app/repositories/components/CommitItem';
+import RepositoryCard from 'app/repositories/components/RepositoryCard';
+import RepositoriesForm from 'app/repositories/components/RepositoriesForm';
 
 class Home extends Component {
     
