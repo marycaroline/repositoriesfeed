@@ -1,11 +1,18 @@
 @import '~react-md/src/scss/react-md';
 
 // Variable overrides
-
-.card-login{
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12), 0 3px 1px -2px rgba(0,0,0,.2);
+.login-wrapper{
+    display: flex;
+    min-height: 90vh;
+    align-items: center;
+    flex: 1;
+    .card-login{
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12), 0 3px 1px -2px rgba(0,0,0,.2);
+        background-color: #FFFFFF;
+        padding: 6rem 8rem;
+        
+    }
 }
-
 
 
 
