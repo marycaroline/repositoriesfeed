@@ -17,14 +17,14 @@ class GitService:
         }
     
     def get_repository(self, repository, owner, user):
-        repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}', headers = self.get_headers(user))
+        repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}')
         if repo_request:
             return repo_request.json()
         return None 
 
     def get_repository_commits(self, repository, owner, user):
         payload = {'since': datetime.today() - timedelta(days = 30)}
-        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/commits', headers = self.get_headers(user), params = payload)
+        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/commits', params = payload)
         if commits_request:
             return  [{
             'sha': commit['sha'],

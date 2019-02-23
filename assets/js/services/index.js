@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { fetchRepositories } from './repositories';
-import { fetchCommits, fetchAllCommits } from './commits';
+import { fetchRepositories, followRepository } from './repositories';
+import { fetchCommits } from './commits';
 
 axios.interceptors.request.use(function (config) {
     const token = Cookies.get('rfeedtoken');
@@ -15,6 +15,6 @@ axios.interceptors.request.use(function (config) {
 
 export {
     fetchRepositories,
-    fetchCommits,
-    fetchAllCommits,
+    followRepository,
+    fetchCommits
 }

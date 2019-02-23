@@ -37,7 +37,6 @@ class RepositoryViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         repository_name = request.data.get('name')
         repository_owner = request.data.get('owner')
         repository = GitService().get_repository(repository_name, repository_owner, self.request.user)
@@ -48,10 +47,12 @@ class RepositoryViewSet(viewsets.ModelViewSet):
                 user = self.request.user,
                 defaults={'description': repository['description']}
             )
+            if not created:
+                return Response({'message': "Repository already exists"}, status=status.HTTP_303_SEE_OTHER)
             serialized_repository = RepositorySerializer(new_repository, context={'request': request})
             self.save_commits(repository=new_repository)
             return Response(serialized_repository.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': "Repository not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def save_commits(self, repository):
         repository_commits = GitService().get_repository_commits(repository.name, repository.owner, self.request.user)
@@ -74,4 +75,4 @@ class CommitViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication, )
 
     def get_queryset(self):
-        return Commit.objects.filter(repository__user = self.request.user)
+        return Commit.objects.filter(repository__user = self.request.user).order_by('-date')

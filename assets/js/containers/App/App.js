@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import NavigationDrawer from 'react-md/lib/NavigationDrawers';
+import { Route, Switch, Redirect, Link } from 'react-router-dom';
+import { NavigationDrawer } from 'react-md';
 import NavLink from 'app/repositories/components/NavLink';
 import Home from 'pages/Home';
-import RepositoryDetail from 'pages/RepositoryDetail';
 import Cookies from 'js-cookie';
+import { Urls } from 'utils';
 import './style.scss';
 
 
@@ -26,11 +26,11 @@ class App extends Component {
             <NavigationDrawer
               drawerTitle="Menu"
               toolbarTitle="Repositories Feed"
+              toolbarActions={<Link to='/logout' />}
               navItems={navItems.map(props => <NavLink {...props} key={props.to} />)}
             >
               <Switch key={location.key}>
-                <Route exact path="/repositories/" location={location} component={Home} />
-                <Route path="/repositories/:id" location={location} component={RepositoryDetail} />
+                <Route path="/repositories/:repositoryId?" location={location} component={Home} />
               </Switch>
               {this.props.children}
             </NavigationDrawer>

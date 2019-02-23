@@ -15,7 +15,7 @@ class CommitItem extends Component {
             primaryText={commit.message}
             secondaryText={
               showLink?
-                <Link to={`/repositories/${commit.repository}`} className="repository-link">{commit.repository}</Link>
+                <Link to={`/repositories/${commit.repository}`} className="repository-link">{repository? repository.name: null}</Link>
                 : commit.sha
               }
             inkDisabled

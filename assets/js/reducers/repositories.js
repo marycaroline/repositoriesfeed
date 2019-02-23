@@ -1,13 +1,14 @@
 import {
   FETCH_REPOSITORIES_REQUEST,
   FETCH_REPOSITORIES_SUCCESS,
-  FETCH_REPOSITORIES_FAILURE
+  FETCH_REPOSITORIES_FAILURE,
+  FOLLOW_REPOSITORY_REQUEST,
+  FOLLOW_REPOSITORY_SUCCESS,
+  FOLLOW_REPOSITORY_FAILURE
 } from 'constants/repositories';
 import initial from './initial';
 
 const repositories = (state = initial.repositories, action) => {
-  console.log(action);
-  
   switch (action.type) {
     case FETCH_REPOSITORIES_REQUEST:
       return {
@@ -24,6 +25,12 @@ const repositories = (state = initial.repositories, action) => {
         fetching: false,
         data: []
       }
+    case FOLLOW_REPOSITORY_SUCCESS:
+      return {
+        fetching: false,
+        data: [...state.data, action.payload]
+      }
+    case FOLLOW_REPOSITORY_FAILURE:
     default:
       return state
   }
