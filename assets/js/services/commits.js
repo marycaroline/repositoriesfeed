@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:8000/api/';
+const URL = Urls.commits_list();
 
 export function fetchCommits() {
-    return axios(`${URL}commits/`)
+    return axios(URL)
 }
 
 

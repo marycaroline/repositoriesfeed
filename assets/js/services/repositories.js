@@ -1,7 +1,8 @@
 
 import axios from 'axios';
+import { Urls } from 'utils';
 
-const URL = 'http://localhost:8000/api/repositories/';
+const URL = Urls.repositories_list();
 
 export function fetchRepositories(){
     return axios(URL)

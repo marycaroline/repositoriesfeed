@@ -28,8 +28,20 @@ class GitService:
         if commits_request:
             return  [{
             'sha': commit['sha'],
-            'author': commit['commit']['committer']['name'],
+            'author': self.get_username_from_url(commit['committer']['url']),
             'message': commit['commit']['message'],
-            'date': commit['commit']['author']['date']
+            'date': commit['commit']['committer']['date']
             } for commit in commits_request.json()]
         return None
+
+    def get_username_from_url(self, url):
+        return url.split('/')[-1]
+
+    def set_repository_webhook(self, repository, owner):
+        payload = {
+            'config' : {
+                'url': '',
+                'content_type': 'json'
+                }
+        }
+        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/hooks', params = payload)

@@ -11,7 +11,7 @@ class CommitItem extends Component {
     const { commit, repository, showLink } = this.props;
     return (
         <ListItem
-            leftAvatar={<Avatar src={`https://github.com/${commit.author}.png`} />}
+        leftAvatar={<Avatar src={`https://github.com/${(commit.author).replace(/ +/g, "")}.png`} />}
             primaryText={commit.message}
             secondaryText={
               showLink?
