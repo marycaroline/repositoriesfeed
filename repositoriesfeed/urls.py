@@ -10,7 +10,7 @@ from rest_framework import routers
 
 # from rest_framework.authtoken import views
 
-from repositories.views import CommitViewSet, RepositoryViewSet
+from repositories.views import CommitViewSet, RepositoryViewSet, GithubHookListener
 from users.views import LoginView, UserViewSet, HomeView
 
 
@@ -22,12 +22,13 @@ router.register(r'repositories', RepositoryViewSet, basename = 'repositories')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^jsreverse/$', django_js_reverse.views.urls_js, name='js_reverse'),
-    url(r'^$', RedirectView.as_view(url='repositories')),
-    url(r'^repositories/', HomeView.as_view(), name='repositories'),
+    url(r'^$', RedirectView.as_view(url='rfeed')),
+    url(r'^rfeed/', HomeView.as_view(), name='home'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^api/', include(router.urls)),
+    url(r'^webhook/$', GithubHookListener.as_view(), name='webhooklistener'),
 ]
 
 if settings.DEBUG:

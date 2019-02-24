@@ -4,6 +4,8 @@ import os
 
 from decouple import config  # noqa
 
+import repositories
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -106,7 +108,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'repositories.paginator.CustomPageNumber',
 }
 
 LOGIN_URL = 'login'
@@ -115,7 +118,7 @@ LOGIN_REDIRECT_URL = 'repositories'
 
 SOCIAL_AUTH_GITHUB_KEY = config('GITHUB_CLIENT_ID')
 SOCIAL_AUTH_GITHUB_SECRET = config('GITHUB_CLIENT_SECRET')
-SOCIAL_AUTH_GITHUB_SCOPE = ['user']
+SOCIAL_AUTH_GITHUB_SCOPE = ['user', 'repo',]
 
 LANGUAGE_CODE = 'en-us'
 

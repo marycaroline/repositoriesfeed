@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
+from django.urls import reverse_lazy
+
 import requests
 
 
@@ -17,31 +20,36 @@ class GitService:
         }
     
     def get_repository(self, repository, owner, user):
-        repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}')
+        repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}', headers=self.get_headers(user))
         if repo_request:
             return repo_request.json()
         return None 
 
     def get_repository_commits(self, repository, owner, user):
         payload = {'since': datetime.today() - timedelta(days = 30)}
-        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/commits', params = payload)
+        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/commits', params = payload, headers=self.get_headers(user))
         if commits_request:
             return  [{
             'sha': commit['sha'],
-            'author': self.get_username_from_url(commit['committer']['url']),
+            'author': commit['commit']['author']['name'],
             'message': commit['commit']['message'],
-            'date': commit['commit']['committer']['date']
+            'date': commit['commit']['author']['date']
             } for commit in commits_request.json()]
         return None
 
-    def get_username_from_url(self, url):
-        return url.split('/')[-1]
-
-    def set_repository_webhook(self, repository, owner):
+    def set_repository_webhook(self, repository, owner, user, url):
         payload = {
-            'config' : {
-                'url': '',
-                'content_type': 'json'
+            "events": [
+                "push",
+            ],
+            "config" : {
+                "url": url,
+                "content_type": "json"
                 }
         }
-        commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/hooks', params = payload)
+        hook_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/hooks', headers=self.get_headers(user), params = payload)
+        print(self.get_headers(user))
+        print(f'{self.URL}/repos/{owner}/{repository}/hooks')
+        print(payload)
+        print(hook_request.status_code)
+        print(url)
