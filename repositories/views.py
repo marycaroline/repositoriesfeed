@@ -4,6 +4,8 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from rest_framework import status, viewsets
@@ -90,9 +92,9 @@ class CommitViewSet(viewsets.ModelViewSet):
         return Commit.objects.filter(repository__user = self.request.user).order_by('-date')
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class GithubHookListener(View):
     def post(self, request, format=None):
-        print(request)
         if(request.META['X-GitHub-Delivery'] == 'push'):
             received_data = json.loads(request.body)
 

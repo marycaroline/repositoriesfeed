@@ -20,20 +20,11 @@ class Home extends Component {
     }
     
     componentDidMount () {
-        if(!this.props.repositories.count){
+        if(!this.props.repositories.count || !this.props.commits.count){
             this.props.fetchRepositories();
-        }
-        setTimeout(() => {
             this.props.fetchCommits();
-        }, 100);
-    }
-
-    getFilteredCommits(repository){
-        const { commits } = this.props;
-        if (repository){
-            return commits.results.filter(commit => commit.repository == repository)
         }
-         else return commits.results;
+        
     }
 
     getRepositoryById(id){
@@ -65,8 +56,9 @@ class Home extends Component {
                     />
             {commits.count && repositories.count?
                     <CommitsList 
+                        key={1}
                         commits={commits}  
-                        getRepositoryById={(id) => this.getRepositoryById(id)} 
+                        getRepositoryById={this.getRepositoryById.bind(this)} 
                         onFetch={fetchCommits}
                         />
                 : null

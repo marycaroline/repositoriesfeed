@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, Redirect, Link } from 'react-router-dom';
 import { NavigationDrawer } from 'react-md';
 import { NavLink } from 'app/repositories';
-import { Home, Repositories, RepositoryDetail } from 'pages';
+import { Home, RepositoryDetail } from 'pages';
 import Cookies from 'js-cookie';
 import './style.scss';
 
@@ -31,7 +31,6 @@ class App extends Component {
               <Switch key={location.key}>
                 <Redirect exact from="/rfeed" to="/rfeed/commits/" />
                 <Route path="/rfeed/commits/" location={location} component={Home} />
-                <Route exact path="/rfeed/repositories/" location={location} component={Repositories} />
                 <Route path="/rfeed/repositories/:id" location={location} component={RepositoryDetail} />
               </Switch>
               {this.props.children}

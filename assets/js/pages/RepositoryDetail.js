@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { FETCH_COMMITS_REQUEST } from 'constants/commits';
-import { FETCH_REPOSITORIES_REQUEST, FOLLOW_REPOSITORY_REQUEST } from 'constants/repositories';
+import { FETCH_REPOSITORIES_REQUEST } from 'constants/repositories';
 import { FETCH_COMMITS_BY_REPOSITORY_REQUEST } from 'constants/commits';
 import RepositoryCard from 'app/repositories/components/RepositoryCard';
 import CommitsList from 'app/repositories/components/CommitsList';
@@ -12,9 +11,9 @@ class RepositoriesDetail extends Component {
         if (!this.props.repositories.count) {
             this.props.fetchRepositories();
         }
-        setTimeout(() => {
+        if(this.props.match.params.id){
             this.props.fetchCommitsByRepository(this.props.match.params.id);
-        }, 100);
+        }
     }
 
     fetchFiltered(){

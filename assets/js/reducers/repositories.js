@@ -32,7 +32,7 @@ const repositories = (state = initial.repositories, action) => {
       return Object.assign({}, state, {
         fetching: false,
         count: state.count + 1,
-        results: [...state.results, action.payload.results]
+        results: [...state.results, action.payload]
       })
     case FOLLOW_REPOSITORY_FAILURE:
     default:

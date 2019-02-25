@@ -47,9 +47,4 @@ class GitService:
                 "content_type": "json"
                 }
         }
-        hook_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/hooks', headers=self.get_headers(user), params = payload)
-        print(self.get_headers(user))
-        print(f'{self.URL}/repos/{owner}/{repository}/hooks')
-        print(payload)
-        print(hook_request.status_code)
-        print(url)
+        hook_request = requests.post(f'{self.URL}/repos/{owner}/{repository}/hooks', headers=self.get_headers(user), json = payload)
