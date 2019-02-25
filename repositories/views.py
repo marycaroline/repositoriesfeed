@@ -95,17 +95,22 @@ class CommitViewSet(viewsets.ModelViewSet):
 @method_decorator(csrf_exempt, name='dispatch')
 class GithubHookListener(View):
     def post(self, request, format=None):
-        if(request.META['X-GitHub-Delivery'] == 'push'):
-            received_data = json.loads(request.body)
+        if request.META.get('HTTP_X_GITHUB_DELIVERY'):
+            if request.META.get('HTTP_X_GITHUB_EVENT') == "push":
+                received_data = json.loads(request.body)
 
-            repository_name = received_data['repository']['name']
-            repository_owner = received_data['repository']['owner']['login']
-            repository = Repository.objects.filter(name=repository_name, owner=repository_owner).first()
-            if repository:
-                for commit in received_data['commits']:
-                        Commit.objects.get_or_create(
-                            repository = repository,
-                            sha = commit['sha'], 
-                            defaults={'author': commit['author']['name'], 'message': commit['message'], 'date': commit['timestamp']}
-                        )
-            return HttpResponse()
+                repository_name = received_data['repository']['name']
+                repository_owner = received_data['repository']['owner']['login']
+                repository = Repository.objects.filter(name=repository_name, owner=repository_owner).first()
+                if repository:
+                    for commit in received_data['commits']:
+                            Commit.objects.get_or_create(
+                                repository = repository,
+                                sha = commit['sha'], 
+                                defaults={'author': commit['author']['name'], 'message': commit['message'], 'date': commit['timestamp']}
+                            )
+                    return HttpResponse(status=200)
+            if request.headers.get('HTTP_X_GITHUB_EVENT') == "ping":
+                return HttpResponse(status=200)
+        return HttpResponse(status=403)
+        
