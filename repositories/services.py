@@ -19,10 +19,18 @@ class GitService:
             'authorization': f'token {token}'
         }
     
-    def get_repository(self, repository, owner, user):
-        repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}', headers=self.get_headers(user))
+    def get_user_repositories(self, user):
+        owner = user.social_auth.get(provider='github').extra_data['login']
+        repo_request = requests.get(f'{self.URL}/users/{owner}/repos', headers=self.get_headers(user))
         if repo_request:
             return repo_request.json()
+        return None 
+
+    def get_repository(self, repository, owner, user):
+        if(owner == user.social_auth.get(provider='github').extra_data['login']):
+            repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}', headers=self.get_headers(user))
+            if repo_request:
+                return repo_request.json()
         return None 
 
     def get_repository_commits(self, repository, owner, user):

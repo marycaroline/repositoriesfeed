@@ -10,7 +10,7 @@ from rest_framework import routers
 
 # from rest_framework.authtoken import views
 
-from repositories.views import CommitViewSet, RepositoryViewSet, GithubHookListener
+from repositories.views import CommitViewSet, RepositoryViewSet, GithubHookListener, UsersRepositoryList
 from users.views import LoginView, UserViewSet, HomeView
 
 
@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^api/', include(router.urls)),
     url(r'^webhook/$', GithubHookListener.as_view(), name='webhooklistener'),
+    url(r'^users/repositories/$', UsersRepositoryList.as_view(), name='userRepositories')
 ]
 
 if settings.DEBUG:

@@ -91,6 +91,9 @@ class CommitViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Commit.objects.filter(repository__user = self.request.user).order_by('-date')
 
+class UsersRepositoryList(View):
+    def get(self, request):
+        return GitService().get_user_repositories(self.request.user)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class GithubHookListener(View):

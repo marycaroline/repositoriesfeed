@@ -10,13 +10,6 @@ class Home extends Component {
     constructor(props){
         super(props);
         
-        this.state = {
-            name: '',
-            owner: ''
-        }
-
-        this.onChangeOwnerName = this.onChangeOwnerName.bind(this);
-        this.onChangeRepositoryName =this.onChangeRepositoryName.bind(this);
     }
     
     componentDidMount () {
@@ -24,36 +17,49 @@ class Home extends Component {
             this.props.fetchRepositories();
             this.props.fetchCommits();
         }
-        
     }
 
     getRepositoryById(id){
         return this.props.repositories.results.find(repository => repository.id == id)
     }
 
-    onChangeOwnerName(e){
-        this.setState({owner: e})
-    }
+    // handleSearch = (value) => {
+    //     if (value) {
+    //         if (this.state.repositories) {
+    //             this.setState({ username: '' });
+    //         }
+    //         this.search(value);
+    //     } else {
+    //         //clear
+    //     }
+    // };
 
-    onChangeRepositoryName(e) {
-        this.setState({ repository: e })
-    }
+    // handleAutocomplete = (value, index, matches) => {
+    //     //const username = matches[index].primaryText;
+    //     //clear
+    //     //search here
+    //     this.setState({ username });
+    // };
 
-    followRepository(){
-        if(this.state.repository.length && this.state.owner.length){
-            this.props.followRepository(this.state); 
-        }
-    }
+    // followRepository(){
+    //     if(this.state.repository.length && this.state.owner.length){
+    //         this.props.followRepository(this.state); 
+    //     }
+    // }
 
     render() {
         const { commits, repositories, fetchCommits } = this.props;
         return (
         <div>
-            <RepositoriesForm 
-                changeOwner={this.onChangeOwnerName}
-                changeRepositoryName={this.onChangeRepositoryName}
-                onSubmit={(e) => this.followRepository()}
-                    />
+            {/* <Autocomplete
+                id="github-search"
+                label="Search Your GitHub Repositories"
+                data={data}
+                filter={null}
+                onChange={this.handleSearch}
+                onAutocomplete={this.handleAutocomplete}
+                clearOnAutocomplete
+            /> */}
             {commits.count && repositories.count?
                     <CommitsList 
                         key={1}
