@@ -36,13 +36,16 @@ class GitService:
                 return repo_request.json()
         return None 
 
+    def get_username_from_url(self, url):
+        return url.split('/')[-1]
+
     def get_repository_commits(self, repository, owner, user):
         payload = {'since': datetime.today() - timedelta(days = 30)}
         commits_request = requests.get(f'{self.URL}/repos/{owner}/{repository}/commits', params = payload, headers=self.get_headers(user))
         if commits_request:
             return  [{
             'sha': commit['sha'],
-            'author': commit['commit']['author']['name'],
+            'author': self.get_username_from_url(commit['author']['url']),
             'message': commit['commit']['message'],
             'date': commit['commit']['author']['date']
             } for commit in commits_request.json()]

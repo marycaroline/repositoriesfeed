@@ -66,7 +66,7 @@ class RepositoryViewSet(viewsets.ModelViewSet):
             self.save_commits(repository=new_repository)
             return Response(serialized_repository.data, status=status.HTTP_201_CREATED)
         return Response({'message': "Repository not found"}, status=status.HTTP_404_NOT_FOUND)
-
+    
     def save_commits(self, repository):
         repository_commits = GitService().get_repository_commits(repository.name, repository.owner, self.request.user)
         if repository_commits: 
@@ -109,13 +109,11 @@ class GithubHookListener(View):
                 repository_owner = received_data['repository']['owner']['login']
                 repository = Repository.objects.filter(name=repository_name, owner=repository_owner).first()
                 if repository:
-                    print(received_data['commits'])
-                    print(request.META)
                     for commit in received_data['commits']:
                             Commit.objects.get_or_create(
                                 repository = repository,
-                                sha = commit['sha'],
-                                defaults={'author': commit['author']['name'], 'message': commit['message'], 'date': commit['timestamp']}
+                                sha = commit['id'],
+                                defaults={'author': commit['author']['username'], 'message': commit['message'], 'date': commit['timestamp']}
                             )
                     return HttpResponse(status=200)
             if request.META.get('HTTP_X_GITHUB_EVENT') == "ping":
