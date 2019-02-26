@@ -41,7 +41,7 @@ class RepositoryViewSet(viewsets.ModelViewSet):
     @action(detail=True)
     def commits(self, request, pk=None):
         repository = get_object_or_404(Repository, pk = pk)
-        queryset = Commit.objects.filter(repository = repository)
+        queryset = Commit.objects.filter(repository = repository).order_by('-date')
         paginator = CustomPageNumber()
         result_page = paginator.paginate_queryset(queryset, request)
         serializer = CommitSerializer(result_page, many=True)
@@ -116,6 +116,6 @@ class GithubHookListener(View):
                                 defaults={'author': commit['author']['name'], 'message': commit['message'], 'date': commit['timestamp']}
                             )
                     return HttpResponse(status=200)
-            if request.headers.get('HTTP_X_GITHUB_EVENT') == "ping":
+            if request.META.get('HTTP_X_GITHUB_EVENT') == "ping":
                 return HttpResponse(status=200)
         return HttpResponse(status=403)
