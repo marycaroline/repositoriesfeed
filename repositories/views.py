@@ -112,7 +112,7 @@ class GithubHookListener(View):
                     for commit in received_data['commits']:
                             Commit.objects.get_or_create(
                                 repository = repository,
-                                sha = commit['sha'], 
+                                sha = commit['sha'],
                                 defaults={'author': commit['author']['name'], 'message': commit['message'], 'date': commit['timestamp']}
                             )
                     return HttpResponse(status=200)
