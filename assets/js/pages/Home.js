@@ -1,93 +1,109 @@
+import { CommitsList, RepositoryCard, RepositorySearch } from 'app/repositories';
+import { FETCH_COMMITS_BY_REPOSITORY_REQUEST, FETCH_COMMITS_REQUEST } from 'constants/commits';
+import { FETCH_REPOSITORIES_REQUEST, FETCH_USER_REPOSITORIES_REQUEST, FOLLOW_REPOSITORY_REQUEST } from 'constants/repositories';
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { FETCH_COMMITS_REQUEST } from 'constants/commits';
-import { FETCH_REPOSITORIES_REQUEST, FOLLOW_REPOSITORY_REQUEST } from 'constants/repositories';
-import CommitsList from 'app/repositories/components/CommitsList';
-import RepositoriesForm from 'app/repositories/components/RepositoriesForm';
+import { connect } from 'react-redux';
 
 class Home extends Component {
-    
-    constructor(props){
-        super(props);
-        
+  constructor(props) {
+    super(props);
+    this.state = {
+      newRepositoryName: '',
+    };
+  }
+
+  componentDidMount() {
+    const {
+      repositories,
+      commits,
+      match,
+      fetchRepositories,
+      fetchCommits,
+      fetchCommitsByRepository,
+      fetchUserRepositories,
+    } = this.props;
+    fetchUserRepositories();
+    if (!repositories.count || !commits.count) {
+      fetchRepositories();
     }
-    
-    componentDidMount () {
-        if(!this.props.repositories.count || !this.props.commits.count){
-            this.props.fetchRepositories();
-            this.props.fetchCommits();
-        }
+    if (match.params.repositoryId) {
+      fetchCommitsByRepository(match.params.repositoryId);
+    } else {
+      fetchCommits();
     }
+  }
 
-    getRepositoryById(id){
-        return this.props.repositories.results.find(repository => repository.id == id)
-    }
 
-    // handleSearch = (value) => {
-    //     if (value) {
-    //         if (this.state.repositories) {
-    //             this.setState({ username: '' });
-    //         }
-    //         this.search(value);
-    //     } else {
-    //         //clear
-    //     }
-    // };
+  getRepositoryById(id) {
+    return this.props.repositories.results.find(repository => repository.id == id);
+  }
 
-    // handleAutocomplete = (value, index, matches) => {
-    //     //const username = matches[index].primaryText;
-    //     //clear
-    //     //search here
-    //     this.setState({ username });
-    // };
+  fetchPageCommits(url) {
+    const { repositoryId } = this.props.match.params;
+    const { fetchCommitsByRepository, fetchCommits } = this.props;
+    if (repositoryId) fetchCommitsByRepository(repositoryId, url);
+    else fetchCommits(url);
+  }
 
-    // followRepository(){
-    //     if(this.state.repository.length && this.state.owner.length){
-    //         this.props.followRepository(this.state); 
-    //     }
+  search(query) {
+    return this.props.userRepositories.filter(repository => repository.full_name.includes(query));
+  }
+
+  handleSearch(value) {
+    if (value) {
+      return this.search(value);
+    } // else {
+    //   //clear
     // }
+  }
 
-    render() {
-        const { commits, repositories, fetchCommits } = this.props;
-        return (
-        <div>
-            {/* <Autocomplete
-                id="github-search"
-                label="Search Your GitHub Repositories"
-                data={data}
-                filter={null}
-                onChange={this.handleSearch}
-                onAutocomplete={this.handleAutocomplete}
-                clearOnAutocomplete
-            /> */}
-            {commits.count && repositories.count?
-                    <CommitsList 
-                        key={1}
-                        commits={commits}  
-                        getRepositoryById={this.getRepositoryById.bind(this)} 
-                        onFetch={fetchCommits}
-                        />
-                : null
-            }
-        </div>
-        )
-    }
+  handleAutocomplete(value, index, matches) {
+    const repository = matches[index].full_name;
+    this.props.followRepository(repository);
+  }
+
+
+  render() {
+    const { commits, repositories, userRepositories } = this.props;
+    const { repositoryId } = this.props.match.params;
+    return (
+      <div>
+        {repositoryId ?
+          <RepositoryCard repository={this.getRepositoryById(repositoryId)} />
+          :
+          <RepositorySearch
+            userRepositories={userRepositories}
+            onChange={(value) => this.handleSearch(value)}
+            onAutocomplete={(value, index, matches) => this.handleAutocomplete(value, index, matches)}
+          />
+        }
+        {commits.count && repositories.count ?
+          <CommitsList
+            commits={commits}
+            selectedRepository={repositoryId}
+            getRepositoryById={(id) => this.getRepositoryById(id)}
+            onFetch={(url) => this.fetchPageCommits(url)}
+          />
+          : null
+        }
+      </div>
+    );
+  }
 }
 
-const mapStateToProps = state => {
-    return {
-        fetching: state.commits.fetching,
-        commits: state.commits,
-        repositories: state.repositories
-    };
-};
+const mapStateToProps = state => ({
+  fetching: state.commits.fetching,
+  commits: state.commits,
+  repositories: state.repositories,
+  userRepositories: state.userRepositories.results,
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        fetchCommits: (url) => dispatch({ type: FETCH_COMMITS_REQUEST, url }),
-        fetchRepositories: () => dispatch({ type: FETCH_REPOSITORIES_REQUEST }),
-        followRepository: (params) => dispatch({ type: FOLLOW_REPOSITORY_REQUEST, params })
-    };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchCommits: url => dispatch({ type: FETCH_COMMITS_REQUEST, url }),
+  fetchRepositories: () => dispatch({ type: FETCH_REPOSITORIES_REQUEST }),
+  fetchUserRepositories: () => dispatch({ type: FETCH_USER_REPOSITORIES_REQUEST }),
+  followRepository: full_name => dispatch({ type: FOLLOW_REPOSITORY_REQUEST, full_name }),
+  fetchCommitsByRepository: (id, url) => dispatch({ type: FETCH_COMMITS_BY_REPOSITORY_REQUEST, id, url }),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,12 +1,12 @@
 import json
 
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.views.generic import View
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, View
 
 from rest_framework import status, viewsets
 from rest_framework.authentication import (
@@ -49,8 +49,7 @@ class RepositoryViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
-        repository_name = request.data.get('name')
-        repository_owner = request.data.get('owner')
+        repository_owner, repository_name = request.data.get('full_name').split('/')
         repository = GitService().get_repository(repository_name, repository_owner, self.request.user)
         if repository:
             new_repository, created = Repository.objects.get_or_create(
@@ -91,9 +90,10 @@ class CommitViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Commit.objects.filter(repository__user = self.request.user).order_by('-date')
 
-class UsersRepositoryList(View):
+class UsersRepositoryList(ListView):
     def get(self, request):
-        return GitService().get_user_repositories(self.request.user)
+        response = GitService().get_user_repositories(self.request.user)
+        return JsonResponse(data=response, safe=False)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class GithubHookListener(View):
@@ -116,4 +116,3 @@ class GithubHookListener(View):
             if request.headers.get('HTTP_X_GITHUB_EVENT') == "ping":
                 return HttpResponse(status=200)
         return HttpResponse(status=403)
-        

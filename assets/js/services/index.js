@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { fetchRepositories, followRepository } from './repositories';
+import { fetchRepositories, followRepository, fetchUserRepositories } from './repositories';
 import { fetchCommits, fetchCommitsByRepository } from './commits';
 
 axios.interceptors.request.use(function (config) {
@@ -16,6 +16,7 @@ axios.interceptors.request.use(function (config) {
 export {
     fetchRepositories,
     followRepository,
+    fetchUserRepositories,
     fetchCommitsByRepository,
-    fetchCommits
-}
+    fetchCommits,
+};

@@ -9,11 +9,10 @@ import './style.scss';
 const CommitItem = ({ commit, repository, showLink }) => {
   return (
     <ListItem
-      leftAvatar={<Avatar src={`https://github.com/${commit.author}.png`} />}
       primaryText={commit.message}
       secondaryText={
         showLink ?
-          <Link to={`/rfeed/repositories/${commit.repository}`} className="repository-link">{repository ? repository.name : null}</Link>
+          <Link to={`/rfeed/${commit.repository}`} className="repository-link">{repository ? repository.name : null}</Link>
           : commit.sha
       }
       inkDisabled

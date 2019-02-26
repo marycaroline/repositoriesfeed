@@ -1,12 +1,14 @@
-import { combineReducers } from "redux";
-import commits from "./commits";
-import repositories from "./repositories";
+import { combineReducers } from 'redux';
+import commits from './commits';
+import repositories from './repositories';
+import userRepositories from './userRepositories';
 import auth from './auth';
 
 const rootReducers = combineReducers({
   commits,
   repositories,
-  auth
-})
+  userRepositories,
+  auth,
+});
 
 export default rootReducers;

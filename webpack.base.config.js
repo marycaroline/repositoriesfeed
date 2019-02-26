@@ -3,40 +3,6 @@ var nodeModulesDir = path.resolve(__dirname, 'node_modules');
 var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = [{
-  entry: [
-    './assets/js/jquery-index.js',
-  ],
-  output: {
-    path: path.resolve('./assets/bundles/'),
-    filename: 'bundle-jquery.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: [nodeModulesDir],
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
-      },
-      {
-        test: /jquery\/dist\/jquery\.js$/,
-        loader: 'expose-loader?$',
-      },
-      {
-        test: /jquery\/dist\/jquery\.js$/,
-        loader: 'expose-loader?jQuery',
-      }],
-  },
-  plugins: [
-    new BundleTracker({
-      filename: './jquery-webpack-stats.json',
-    }),
-  ],
-}, {
   context: __dirname,
   entry: [
     // defined in local or prod

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, Redirect, Link } from 'react-router-dom';
 import { NavigationDrawer } from 'react-md';
 import { NavLink } from 'app/repositories';
-import { Home, RepositoryDetail } from 'pages';
+import { Home } from 'pages';
 import Cookies from 'js-cookie';
 import './style.scss';
 
@@ -10,7 +10,7 @@ import './style.scss';
 const navItems = [{
   exact: true,
   label: 'Home',
-  to: '/rfeed/commits/',
+  to: '/rfeed/',
   icon: 'home',
 }];
 
@@ -19,7 +19,7 @@ class App extends Component {
   
   render() {
     return (
-      <Route path="/rfeed"
+      <Route
         render={({ location }) => (
           Cookies.get('rfeedtoken')?
             <NavigationDrawer
@@ -29,9 +29,7 @@ class App extends Component {
               navItems={navItems.map(props => <NavLink {...props} key={props.to} />)}
             >
               <Switch key={location.key}>
-                <Redirect exact from="/rfeed" to="/rfeed/commits/" />
-                <Route path="/rfeed/commits/" location={location} component={Home} />
-                <Route path="/rfeed/repositories/:id" location={location} component={RepositoryDetail} />
+                <Route path="/rfeed/:repositoryId?" location={location} component={Home} />
               </Switch>
               {this.props.children}
             </NavigationDrawer>

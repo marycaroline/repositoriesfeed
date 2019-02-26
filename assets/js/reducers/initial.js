@@ -5,7 +5,10 @@ export default {
     count: 0,
     current: 1,
     results: [],
-    fetching: false
+    fetching: false,
+  },
+  userRepositories: {
+    results: [],
   },
   commits: {
     next: null,
@@ -13,10 +16,10 @@ export default {
     count: 0,
     current: 1,
     results: [],
-    fetching: false
+    fetching: false,
   },
   auth: {
     email: '',
-    token: null
-  }
-}
+    token: null,
+  },
+};

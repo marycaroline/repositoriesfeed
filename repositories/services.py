@@ -23,7 +23,10 @@ class GitService:
         owner = user.social_auth.get(provider='github').extra_data['login']
         repo_request = requests.get(f'{self.URL}/users/{owner}/repos', headers=self.get_headers(user))
         if repo_request:
-            return repo_request.json()
+            return  [{
+            'full_name': repos['full_name'],
+            'name': repos['name']
+            } for repos in repo_request.json()]
         return None 
 
     def get_repository(self, repository, owner, user):
