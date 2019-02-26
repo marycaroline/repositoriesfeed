@@ -92,7 +92,10 @@ class CommitViewSet(viewsets.ModelViewSet):
 
 class UsersRepositoryList(ListView):
     def get(self, request):
+        saved_repositories = Repository.objects.filter(user = self.request.user).values_list('name', flat=True)
         response = GitService().get_user_repositories(self.request.user)
+        if response:
+            response = [repository for repository in response if repository['name'] not in saved_repositories]
         return JsonResponse(data=response, safe=False)
 
 @method_decorator(csrf_exempt, name='dispatch')
