@@ -109,6 +109,7 @@ class GithubHookListener(View):
                 repository_owner = received_data['repository']['owner']['login']
                 repository = Repository.objects.filter(name=repository_name, owner=repository_owner).first()
                 if repository:
+                    print(received_data['commits'])
                     for commit in received_data['commits']:
                             Commit.objects.get_or_create(
                                 repository = repository,
