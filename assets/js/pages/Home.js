@@ -1,8 +1,11 @@
-import { CommitsList, RepositoryCard, RepositorySearch } from 'app/repositories';
+import { CommitsList, RepositoryCard, RepositorySearch, AppBar } from 'app/repositories';
 import { FETCH_COMMITS_BY_REPOSITORY_REQUEST, FETCH_COMMITS_REQUEST } from 'constants/commits';
 import { FETCH_REPOSITORIES_REQUEST, FETCH_USER_REPOSITORIES_REQUEST, FOLLOW_REPOSITORY_REQUEST } from 'constants/repositories';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { CircularProgress } from 'react-md';
+import Cookies from 'js-cookie';
 
 class Home extends Component {
   constructor(props) {
@@ -15,6 +18,7 @@ class Home extends Component {
   componentDidMount() {
     const {
       repositories,
+      userRepositories,
       commits,
       match,
       fetchRepositories,
@@ -22,17 +26,15 @@ class Home extends Component {
       fetchCommitsByRepository,
       fetchUserRepositories,
     } = this.props;
-    fetchUserRepositories();
+    if (!userRepositories.length) fetchUserRepositories();
     if (!repositories.count || !commits.count) {
       fetchRepositories();
+      fetchCommits();
     }
     if (match.params.repositoryId) {
       fetchCommitsByRepository(match.params.repositoryId);
-    } else {
-      fetchCommits();
     }
   }
-
 
   getRepositoryById(id) {
     return this.props.repositories.results.find(repository => repository.id == id);
@@ -52,9 +54,7 @@ class Home extends Component {
   handleSearch(value) {
     if (value) {
       return this.search(value);
-    } // else {
-    //   //clear
-    // }
+    }
   }
 
   handleAutocomplete(value, index, matches) {
@@ -66,27 +66,37 @@ class Home extends Component {
   render() {
     const { commits, repositories, userRepositories } = this.props;
     const { repositoryId } = this.props.match.params;
+    if (!Cookies.get('rfeedtoken')) {
+      return (<Redirect to="/rfeed/login" />);
+    }
     return (
-      <div>
+      <AppBar>
         {repositoryId ?
           <RepositoryCard repository={this.getRepositoryById(repositoryId)} />
           :
           <RepositorySearch
             userRepositories={userRepositories}
-            onChange={(value) => this.handleSearch(value)}
-            onAutocomplete={(value, index, matches) => this.handleAutocomplete(value, index, matches)}
+            onChange={
+              value => this.handleSearch(value)
+            }
+            onAutocomplete={
+              (value, index, matches) =>
+              this.handleAutocomplete(value, index, matches)
+            }
           />
         }
-        {commits.count && repositories.count ?
-          <CommitsList
-            commits={commits}
-            selectedRepository={repositoryId}
-            getRepositoryById={(id) => this.getRepositoryById(id)}
-            onFetch={(url) => this.fetchPageCommits(url)}
-          />
-          : null
-        }
-      </div>
+        {commits.fetching || repositories.fetching ?
+          <CircularProgress id="loading"/>
+          : 
+          commits.count && repositories.count ?
+            <CommitsList
+              commits={commits}
+              selectedRepository={repositoryId}
+              getRepositoryById={(id) => this.getRepositoryById(id)}
+              onFetch={(url) => this.fetchPageCommits(url)}
+            />
+            : null}
+      </AppBar>
     );
   }
 }

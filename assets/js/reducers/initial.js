@@ -22,4 +22,7 @@ export default {
     email: '',
     token: null,
   },
+  notifications: {
+    messages: [],
+  },
 };

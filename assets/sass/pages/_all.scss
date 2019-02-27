@@ -1,3 +1,13 @@
 // Pages
 
-// @import "";
+.card-login{
+  max-width: 80%;
+  width: 300px; 
+  margin: 0 auto;
+  margin-top: 10%;
+  text-align: center;
+  padding: 2rem;
+  .md-card-title{
+    justify-content: center;
+  }
+}

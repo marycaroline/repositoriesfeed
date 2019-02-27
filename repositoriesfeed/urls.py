@@ -1,17 +1,20 @@
 from django.conf import settings
 from django.conf.urls import include, url  # noqa
 from django.contrib import admin
-from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 import django_js_reverse.views
 from rest_framework import routers
 
+from repositories.views import (
+    CommitViewSet, GithubHookListener, RepositoryViewSet, UsersRepositoryList
+)
+from users.views import HomeView, UserViewSet, LogoutView
+
+
 # from rest_framework.authtoken import views
 
-from repositories.views import CommitViewSet, RepositoryViewSet, GithubHookListener, UsersRepositoryList
-from users.views import LoginView, UserViewSet, HomeView
 
 
 router = routers.DefaultRouter()
@@ -24,7 +27,6 @@ urlpatterns = [
     url(r'^jsreverse/$', django_js_reverse.views.urls_js, name='js_reverse'),
     url(r'^$', RedirectView.as_view(url='rfeed')),
     url(r'^rfeed/', HomeView.as_view(), name='home'),
-    url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^api/', include(router.urls)),

@@ -4,6 +4,7 @@ import {
   FETCH_REPOSITORIES_FAILURE,
   FOLLOW_REPOSITORY_SUCCESS,
   FOLLOW_REPOSITORY_FAILURE,
+  FOLLOW_REPOSITORY_REQUEST,
 } from 'constants/repositories';
 import initial from './initial';
 
@@ -27,6 +28,10 @@ const repositories = (state = initial.repositories, action) => {
         current: action.payload.count,
         results: action.payload.results,
       };
+    case FOLLOW_REPOSITORY_REQUEST:
+      return Object.assign({}, state, {
+        fetching: true,
+      });
     case FOLLOW_REPOSITORY_SUCCESS:
       return Object.assign({}, state, {
         fetching: false,
@@ -34,6 +39,9 @@ const repositories = (state = initial.repositories, action) => {
         results: [...state.results, action.payload],
       });
     case FOLLOW_REPOSITORY_FAILURE:
+      return Object.assign({}, state, {
+        fetching: false,
+      });
     default:
       return state;
   }
