@@ -1,11 +1,11 @@
 import { CommitsList, RepositoryCard, RepositorySearch, AppBar } from 'app/repositories';
 import { FETCH_COMMITS_BY_REPOSITORY_REQUEST, FETCH_COMMITS_REQUEST } from 'constants/commits';
 import { FETCH_REPOSITORIES_REQUEST, FETCH_USER_REPOSITORIES_REQUEST, FOLLOW_REPOSITORY_REQUEST } from 'constants/repositories';
+import { LOGOUT } from 'constants/auth';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { CircularProgress } from 'react-md';
-import Cookies from 'js-cookie';
+import SnackbarContainer from 'containers/SnackbarContainer';
 
 class Home extends Component {
   constructor(props) {
@@ -20,21 +20,25 @@ class Home extends Component {
       repositories,
       userRepositories,
       commits,
-      match,
       fetchRepositories,
-      fetchCommits,
-      fetchCommitsByRepository,
       fetchUserRepositories,
     } = this.props;
     if (!userRepositories.length) fetchUserRepositories();
     if (!repositories.count || !commits.count) {
       fetchRepositories();
-      fetchCommits();
     }
-    if (match.params.repositoryId) {
-      fetchCommitsByRepository(match.params.repositoryId);
+    this.fetchPageCommits()
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    const {
+    } = this.props;
+
+    if(prevProps.match.params.repositoryId !== this.props.match.params.repositoryId){
+        this.fetchPageCommits()
     }
   }
+
 
   getRepositoryById(id) {
     return this.props.repositories.results.find(repository => repository.id == id);
@@ -64,13 +68,10 @@ class Home extends Component {
 
 
   render() {
-    const { commits, repositories, userRepositories } = this.props;
+    const { commits, repositories, userRepositories, logout } = this.props;
     const { repositoryId } = this.props.match.params;
-    if (!Cookies.get('rfeedtoken')) {
-      return (<Redirect to="/rfeed/login" />);
-    }
     return (
-      <AppBar>
+      <AppBar onLogout={logout}>
         {repositoryId ?
           <RepositoryCard repository={this.getRepositoryById(repositoryId)} />
           :
@@ -87,8 +88,8 @@ class Home extends Component {
         }
         {commits.fetching || repositories.fetching ?
           <CircularProgress id="loading"/>
-          : 
-          commits.count && repositories.count ?
+          : null }
+        {commits.count && repositories.count ?
             <CommitsList
               commits={commits}
               selectedRepository={repositoryId}
@@ -96,6 +97,7 @@ class Home extends Component {
               onFetch={(url) => this.fetchPageCommits(url)}
             />
             : null}
+        <SnackbarContainer />
       </AppBar>
     );
   }
@@ -114,6 +116,7 @@ const mapDispatchToProps = dispatch => ({
   fetchUserRepositories: () => dispatch({ type: FETCH_USER_REPOSITORIES_REQUEST }),
   followRepository: full_name => dispatch({ type: FOLLOW_REPOSITORY_REQUEST, full_name }),
   fetchCommitsByRepository: (id, url) => dispatch({ type: FETCH_COMMITS_BY_REPOSITORY_REQUEST, id, url }),
+  logout: () => dispatch({ type: LOGOUT }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
