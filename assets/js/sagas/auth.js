@@ -11,11 +11,9 @@ export function* logout() {
     Cookies.remove('rfeedtoken');
     yield put(push('/rfeed/login'));
   } catch (error) {
-    console.log(error);
     yield showNotification(error.response);
   }
 }
-
 
 export function* authSaga() {
   yield takeLatest(LOGOUT, logout);

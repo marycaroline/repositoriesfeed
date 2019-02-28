@@ -36,17 +36,16 @@ function* getUserRepositories() {
 function* handleErrorMonitor(error) {
   if (error.error.data) {
     yield showNotification(error.error.data.message);
-   } else
-   yield showNotification('Ocorreu um erro inesperado');
+  } else yield showNotification('Ocorreu um erro inesperado');
 }
 
 
 function* monitorRepository(params) {
   try {
     const response = yield call(followRepository, params.full_name);
-    yield showNotification('You are now monitoring this repository');
     yield put({ type: FOLLOW_REPOSITORY_SUCCESS, payload: response.data });
     yield put(push(`${response.data.id}`));
+    yield showNotification('You are now monitoring this repository');
     yield put({ type: FETCH_USER_REPOSITORIES_REQUEST });
   } catch (error) {
     yield put({ type: FOLLOW_REPOSITORY_FAILURE, error: error.response });

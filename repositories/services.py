@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 
 import requests
@@ -27,14 +28,14 @@ class GitService:
             'full_name': repos['full_name'],
             'name': repos['name']
             } for repos in repo_request.json()]
-        return None 
+        return repo_request
 
     def get_repository(self, repository, owner, user):
         if(owner == user.social_auth.get(provider='github').extra_data['login']):
             repo_request = requests.get(f'{self.URL}/repos/{owner}/{repository}', headers=self.get_headers(user))
             if repo_request:
                 return repo_request.json()
-        return None 
+            return repo_request
 
     def get_username_from_url(self, url):
         return url.split('/')[-1]
@@ -49,7 +50,7 @@ class GitService:
             'message': commit['commit']['message'],
             'date': commit['commit']['author']['date']
             } for commit in commits_request.json()]
-        return None
+        return commits_request
 
     def set_repository_webhook(self, repository, owner, user, url):
         payload = {

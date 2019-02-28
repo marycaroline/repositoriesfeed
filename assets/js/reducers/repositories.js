@@ -29,19 +29,22 @@ const repositories = (state = initial.repositories, action) => {
         results: action.payload.results,
       };
     case FOLLOW_REPOSITORY_REQUEST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         fetching: true,
-      });
+      };
     case FOLLOW_REPOSITORY_SUCCESS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         fetching: false,
         count: state.count + 1,
         results: [...state.results, action.payload],
-      });
+      };
     case FOLLOW_REPOSITORY_FAILURE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         fetching: false,
-      });
+      };
     default:
       return state;
   }

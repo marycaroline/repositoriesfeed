@@ -13,7 +13,7 @@ const userRepositories = (state = initial.userRepositories, action) => {
       };
     case FETCH_USER_REPOSITORIES_SUCCESS:
       return {
-        results: action.payload,
+        results: action.payload || [],
       };
     default:
       return state;

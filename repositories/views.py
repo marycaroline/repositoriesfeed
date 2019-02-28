@@ -65,7 +65,7 @@ class RepositoryViewSet(viewsets.ModelViewSet):
             serialized_repository = RepositorySerializer(new_repository, context={'request': request})
             self.save_commits(repository=new_repository)
             return Response(serialized_repository.data, status=status.HTTP_201_CREATED)
-        return Response({'message': "Repository not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': "Repository not found"}, status=repository.status_code)
     
     def save_commits(self, repository):
         repository_commits = GitService().get_repository_commits(repository.name, repository.owner, self.request.user)
@@ -96,7 +96,8 @@ class UsersRepositoryList(ListView):
         response = GitService().get_user_repositories(self.request.user)
         if response:
             response = [repository for repository in response if repository['name'] not in saved_repositories]
-        return JsonResponse(data=response, safe=False)
+            return JsonResponse(response, status=status.HTTP_200_OK, safe=False)
+        return JsonResponse(None, status=response.status_code, safe=False)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class GithubHookListener(View):

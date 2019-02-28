@@ -70,6 +70,8 @@ class Home extends Component {
   render() {
     const { commits, repositories, userRepositories, logout } = this.props;
     const { repositoryId } = this.props.match.params;
+    const progress = repositories.fetching || commits.fetching;
+
     return (
       <AppBar onLogout={logout}>
         {repositoryId ?
@@ -86,17 +88,14 @@ class Home extends Component {
             }
           />
         }
-        {commits.fetching || repositories.fetching ?
-          <CircularProgress id="loading"/>
-          : null }
-        {commits.count && repositories.count ?
-            <CommitsList
-              commits={commits}
-              selectedRepository={repositoryId}
-              getRepositoryById={(id) => this.getRepositoryById(id)}
-              onFetch={(url) => this.fetchPageCommits(url)}
-            />
-            : null}
+        {progress ?
+          <CircularProgress id="loading" />
+        : <CommitsList
+            commits={commits}
+            selectedRepository={repositoryId}
+            getRepositoryById={id => this.getRepositoryById(id)}
+            onFetch={url => this.fetchPageCommits(url)}
+          />}
         <SnackbarContainer />
       </AppBar>
     );
