@@ -1,5 +1,5 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { apiCall } from "utils";
+
 
 export function postLogout(){
   return axios.post(Urls.logout(), {}, {headers: {

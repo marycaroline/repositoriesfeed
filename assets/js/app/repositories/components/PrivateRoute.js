@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Cookies from 'js-cookie';
 import { Route, Redirect } from 'react-router-dom';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Comp, ...rest }) => {
+  console.log(rest)
+  return (
   <Route
     {...rest}
     render={ ({ location, ...props }) =>
       Cookies.get('rfeedtoken') ? (
-        <Component {...props} location={location} />
+        <Comp {...props} location={location} />
       ) : (
         <Redirect
           to={{
@@ -18,7 +20,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       )
     }
   />
-);
+  )};
 
 
 export default PrivateRoute;

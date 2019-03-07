@@ -52,9 +52,10 @@ function* monitorRepository(params) {
   }
 }
 
-export function* repositoriesSaga() {
-  yield takeLatest(FETCH_REPOSITORIES_REQUEST, getRepositories);
-  yield takeLatest(FOLLOW_REPOSITORY_REQUEST, monitorRepository);
-  yield takeLatest(FETCH_USER_REPOSITORIES_REQUEST, getUserRepositories);
-  yield takeLatest(FOLLOW_REPOSITORY_FAILURE, handleErrorMonitor);
-}
+export const repositoriesSaga = [
+  takeLatest(FETCH_REPOSITORIES_REQUEST, getRepositories),
+  takeLatest(FOLLOW_REPOSITORY_REQUEST, monitorRepository),
+  takeLatest(FETCH_USER_REPOSITORIES_REQUEST, getUserRepositories),
+  takeLatest(FOLLOW_REPOSITORY_FAILURE, handleErrorMonitor),
+]
+

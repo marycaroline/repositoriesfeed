@@ -1,4 +1,4 @@
 import Urls from './urls';
-import history from './history';
+import apiCall from './apiCall';
 
-export { Urls, history }; // eslint-disable-line import/prefer-default-export
+export { Urls, apiCall }; // eslint-disable-line import/prefer-default-export

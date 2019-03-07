@@ -1,20 +1,11 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
-import Cookies from 'js-cookie';
-import { push } from 'connected-react-router';
-import { postLogout } from 'services';
+import { takeLatest, call } from 'redux-saga/effects';
 import { LOGOUT } from 'constants/auth';
-import showNotification from './notifications';
+import { Urls, apiCall } from 'utils';
 
 export function* logout() {
-  try{
-    const response = yield call(postLogout);
-    Cookies.remove('rfeedtoken');
-    yield put(push('/rfeed/login'));
-  } catch (error) {
-    yield showNotification(error.response);
-  }
+  yield call(apiCall, Urls.logout());
 }
 
-export function* authSaga() {
-  yield takeLatest(LOGOUT, logout);
-}
+export const authSaga  = [
+  takeLatest(LOGOUT, logout)
+]

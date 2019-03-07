@@ -6,8 +6,8 @@ import { authSaga } from './auth';
 // combine all the module sagas
 export default function* rootSaga() {
   yield all([
-    repositoriesSaga(),
-    commitsSaga(),
-    authSaga(),
+    ...repositoriesSaga,
+    ...commitsSaga,
+    ...authSaga,
   ]);
 }

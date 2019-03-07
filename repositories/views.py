@@ -6,9 +6,9 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, View
+from django.views.generic import View
 
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, generics
 from rest_framework.authentication import (
     BasicAuthentication, SessionAuthentication, TokenAuthentication
 )
@@ -33,7 +33,7 @@ class RepositoryViewSet(viewsets.ModelViewSet):
     """
     serializer_class = RepositorySerializer
     model = Repository
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication, )
 
     def get_queryset(self):
         return Repository.objects.filter(user = self.request.user)
@@ -66,15 +66,15 @@ class RepositoryViewSet(viewsets.ModelViewSet):
             self.save_commits(repository=new_repository)
             return Response(serialized_repository.data, status=status.HTTP_201_CREATED)
         return Response({'message': "Repository not found"}, status=repository.status_code)
-    
+
     def save_commits(self, repository):
         repository_commits = GitService().get_repository_commits(repository.name, repository.owner, self.request.user)
-        if repository_commits: 
+        if repository_commits:
             with transaction.atomic():
                 for commit in repository_commits:
                     Commit.objects.get_or_create(
                         repository = repository,
-                        sha = commit['sha'], 
+                        sha = commit['sha'],
                         defaults={'author': commit['author'], 'message': commit['message'], 'date': commit['date']}
                     )
 
@@ -90,7 +90,8 @@ class CommitViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Commit.objects.filter(repository__user = self.request.user).order_by('-date')
 
-class UsersRepositoryList(ListView):
+class UsersRepositoryList(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
     def get(self, request):
         saved_repositories = Repository.objects.filter(user = self.request.user).values_list('name', flat=True)
         response = GitService().get_user_repositories(self.request.user)

@@ -6,11 +6,14 @@ import {
   FETCH_COMMITS_BY_REPOSITORY_REQUEST,
 } from 'constants/commits';
 import { fetchCommits, fetchCommitsByRepository } from 'services';
+import { Urls, apiCall } from 'utils';
 
 function* getAllCommits(params) {
-  const { url } = params;
+  let { url } = params;
+  console.log(Urls);
+  if(!url) url = Urls.commits_list();
   try {
-    const response = yield call(fetchCommits, url);
+    const response = yield call(apiCall, url, 'GET', { url });
     yield put({ type: FETCH_COMMITS_SUCCESS, payload: response.data });
   } catch (error) {
     yield put({ type: FETCH_COMMITS_FAILURE, error });
@@ -18,16 +21,17 @@ function* getAllCommits(params) {
 }
 
 function* getCommitsByRepository(params) {
-  const { id, url } = params;
+  let { id, url } = params;
+  if(!url) url =  Urls.repositories_list();
   try {
-    const response = yield call(fetchCommitsByRepository, id, url);
+    const response = yield call(apiCall, url, 'GET', {id, url});
     yield put({ type: FETCH_COMMITS_SUCCESS, payload: response.data });
   } catch (error) {
     yield put({ type: FETCH_COMMITS_FAILURE, error });
   }
 }
 
-export function* commitsSaga() {
-  yield takeLatest(FETCH_COMMITS_REQUEST, getAllCommits);
-  yield takeLatest(FETCH_COMMITS_BY_REPOSITORY_REQUEST, getCommitsByRepository);
-}
+export const commitsSaga = [
+  takeLatest(FETCH_COMMITS_REQUEST, getAllCommits),
+  takeLatest(FETCH_COMMITS_BY_REPOSITORY_REQUEST, getCommitsByRepository),
+]

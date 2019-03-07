@@ -16,6 +16,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    console.log('aqui');
     const {
       repositories,
       userRepositories,

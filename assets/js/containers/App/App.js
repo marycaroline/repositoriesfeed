@@ -10,7 +10,7 @@ class App extends PureComponent {
     return (
       <Switch key={location}>
         <Route exact path="/rfeed/login" location={location} component={Login} />
-        <PrivateRoute exact path="/rfeed/:repositoryId?" location={location} component={Home} />
+        <PrivateRoute path="/rfeed/:repositoryId?" location={location} component={Home} />
       </Switch>
     );
   }
