@@ -9,7 +9,6 @@ import initial from './initial';
 const commits = (state = initial.commits, action) => {
   switch (action.type) {
     case FETCH_COMMITS_REQUEST || FETCH_COMMITS_FAILURE || FETCH_COMMITS_BY_REPOSITORY_REQUEST:
-    console.log(action);
       return {
         fetching: true,
         next: null,
