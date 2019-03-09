@@ -14,8 +14,8 @@ const CommitsList = ({
 }) => {
   const textEmpty =
     selectedRepository ?
-      'Não houveram commits nesse repositório nos ultimos 30 dias'
-      : 'Não houveram commits nos ultimos 30 dias';
+      'There were no commits to this repository in the past 30 days'
+      : 'There were no commits in the past 30 days';
   return (
     commits.count ?
       <div>

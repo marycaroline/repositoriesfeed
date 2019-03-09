@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url  # noqa
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
-from django.views.generic import RedirectView, TemplateView
+from django.views.generic import RedirectView
 
 import django_js_reverse.views
 from rest_framework import routers
@@ -10,17 +9,13 @@ from rest_framework import routers
 from repositories.views import (
     CommitViewSet, GithubHookListener, RepositoryViewSet, UsersRepositoryList
 )
-from users.views import HomeView, UserViewSet, LogoutView
-
-
-# from rest_framework.authtoken import views
-
+from users.views import HomeView, LogoutView, UserViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'commits', CommitViewSet, basename = 'commits')
-router.register(r'repositories', RepositoryViewSet, basename = 'repositories')
+router.register(r'commits', CommitViewSet, basename='commits')
+router.register(r'repositories', RepositoryViewSet, basename='repositories')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

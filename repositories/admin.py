@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Repository, Commit
 
-# Register your models here.
+from .models import Commit, Repository
+
 
 admin.site.register(Repository)
 admin.site.register(Commit)

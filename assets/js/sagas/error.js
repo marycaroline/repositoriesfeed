@@ -8,12 +8,12 @@ function* unauthorizedHandler() {
 }
 
 function* globalErrorHandler(errorResponse) {
-  const { status } = errorResponse.error.response;
-  if (status === 401 || 403) {
+  const { status, statusText } = errorResponse.error.response;
+  if (status === 401 || status === 403) {
     yield showNotification('Your access has expired, Please login again');
     yield unauthorizedHandler(errorResponse);
   } else {
-    yield showNotification(errorResponse);
+    yield showNotification(statusText);
   }
 }
 
