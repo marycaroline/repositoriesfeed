@@ -1,18 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
-import configureStore from './store';
-import initialState from './reducers/initial';
-import App from './containers/App';
-
-const store = configureStore(initialState);
+import { ConnectedRouter } from 'connected-react-router';
+import { App } from 'containers';
+import initialState from 'reducers/initial';
+import configureStore, { history } from './store';
 
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Router>
-            <App />
-        </Router>
-    </Provider>
-, document.getElementById('react-app'));
+  <Provider store={configureStore(initialState)}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('react-app'),
+);

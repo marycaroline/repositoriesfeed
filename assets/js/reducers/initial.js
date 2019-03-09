@@ -1,10 +1,28 @@
 export default {
   repositories: {
-    data: [],
-    fetching: false
+    next: null,
+    previous: null,
+    count: 0,
+    current: 1,
+    results: [],
+    fetching: false,
+  },
+  userRepositories: {
+    results: [],
   },
   commits: {
-    data: [],
-    fetching: false
-  }
-}
+    next: null,
+    previous: null,
+    count: 0,
+    current: 1,
+    results: [],
+    fetching: false,
+  },
+  auth: {
+    email: '',
+    token: null,
+  },
+  notifications: {
+    messages: [],
+  },
+};

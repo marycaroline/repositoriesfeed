@@ -1,39 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import NavigationDrawer from 'react-md/lib/NavigationDrawers';
-import NavLink from 'app/repositories/components/NavLink';
-import Home from 'pages/Home';
+import { Home, Login } from 'pages';
+import { SnackbarContainer } from 'containers';
+
 import './style.scss';
 
 
-const navItems = [{
-  exact: true,
-  label: 'Home',
-  to: '/home',
-  icon: 'home',
-}];
+const App = () => (
+  <div>
+    <Switch>
+      <Route exact path="/rfeed/login" component={Login} />
+      <Route path="/rfeed/:repositoryId?" component={Home} />
+    </Switch>
+    <SnackbarContainer />
+  </div>
+);
 
-
-class App extends Component {
-  render() {
-    return (
-      <Route
-        render={({ location }) => (
-          <NavigationDrawer
-            drawerTitle="react-md with CRA"
-            toolbarTitle="Welcome to react-md"
-            navItems={navItems.map(props => <NavLink {...props} key={props.to} />)}
-          >
-            <Switch key={location.key}>
-              <Route exact path="/home" location={location} component={Home} />
-              <Route path="/page-1" location={location} component={Home} />
-            </Switch>
-            {this.props.children}
-          </NavigationDrawer>
-        )}
-      />
-    );
-  }
-}
 
 export default App;
+

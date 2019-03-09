@@ -4,6 +4,8 @@ import os
 
 from decouple import config  # noqa
 
+import repositories
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -101,20 +103,22 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissions',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'repositories.paginator.CustomPageNumber',
 }
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 
-SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
-SOCIAL_AUTH_GITHUB_SECRET = config('SOCIAL_AUTH_GITHUB_SECRET')
-SOCIAL_AUTH_GITHUB_SCOPE = ['user']
+SOCIAL_AUTH_GITHUB_KEY = config('GITHUB_CLIENT_ID')
+SOCIAL_AUTH_GITHUB_SECRET = config('GITHUB_CLIENT_SECRET')
+SOCIAL_AUTH_GITHUB_SCOPE = ['user', 'repo',]
 
 LANGUAGE_CODE = 'en-us'
 
@@ -137,10 +141,6 @@ WEBPACK_LOADER = {
         'STATS_FILE': base_dir_join('webpack-stats.json'),
         'POLL_INTERVAL': 0.1,
         'IGNORE': ['.+\.hot-update.js', '.+\.map']
-    },
-    'JQUERY': {
-        'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': 'jquery-webpack-stats.json',
     }
 }
 

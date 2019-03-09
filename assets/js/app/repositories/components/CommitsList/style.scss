@@ -1,0 +1,12 @@
+.commit-item{
+    .md-list-tile--active {
+        background: #ffffff !important;
+    }
+    .md-pointer--hover:hover{
+        cursor: default;
+    }
+    a{
+        color: black;
+        font-weight: 500;
+    }
+}
