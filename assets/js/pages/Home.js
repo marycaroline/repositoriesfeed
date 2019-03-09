@@ -33,7 +33,8 @@ class Home extends Component {
 
 
   getRepositoryById(id) {
-    return this.props.repositories.results.find(repository => repository.id === id);
+    return this.props.repositories.results
+      .find(repository => repository.id == id); // eslint-disable-line eqeqeq
   }
 
   fetchPageCommits(url) {
@@ -59,11 +60,12 @@ class Home extends Component {
 
   render() {
     const {
-      commits, repositories, userRepositories, logout,
+      commits, repositories, userRepositories, logout, match,
     } = this.props;
-    const { repositoryId } = this.props.match.params;
+    const { repositoryId } = match.params;
     const progress = repositories.fetching || commits.fetching;
-    const repository = repositoryId ? this.getRepositoryById(repositoryId) : null;
+    const repository = this.getRepositoryById(repositoryId);
+
     if (!Cookies.get('rfeedtoken')) {
       logout();
       return <Redirect to="/rfeed/login" />;
