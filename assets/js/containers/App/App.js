@@ -1,20 +1,21 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Home, Login } from 'pages';
-import { PrivateRoute } from 'app/repositories';
+import { SnackbarContainer } from 'containers';
+
 import './style.scss';
 
 
-class App extends PureComponent {
-  render() {
-    return (
-      <Switch key={location}>
-        <Route exact path="/rfeed/login" location={location} component={Login} />
-        <PrivateRoute exact path="/rfeed/:repositoryId?" location={location} component={Home} />
-      </Switch>
-    );
-  }
-}
+const App = () => (
+  <div>
+    <Switch>
+      <Route exact path="/rfeed/login" component={Login} />
+      <Route path="/rfeed/:repositoryId?" component={Home} />
+    </Switch>
+    <SnackbarContainer />
+  </div>
+);
+
 
 export default App;
 

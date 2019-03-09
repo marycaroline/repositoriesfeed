@@ -6,6 +6,7 @@ import {
   FETCH_COMMITS_BY_REPOSITORY_REQUEST,
 } from 'constants/commits';
 import { fetchCommits, fetchCommitsByRepository } from 'services';
+import { ERROR } from 'constants/notifications';
 
 function* getAllCommits(params) {
   const { url } = params;
@@ -14,6 +15,7 @@ function* getAllCommits(params) {
     yield put({ type: FETCH_COMMITS_SUCCESS, payload: response.data });
   } catch (error) {
     yield put({ type: FETCH_COMMITS_FAILURE, error });
+    yield put({ type: ERROR, error });
   }
 }
 
@@ -24,10 +26,11 @@ function* getCommitsByRepository(params) {
     yield put({ type: FETCH_COMMITS_SUCCESS, payload: response.data });
   } catch (error) {
     yield put({ type: FETCH_COMMITS_FAILURE, error });
+    yield put({ type: ERROR, error });
   }
 }
 
-export function* commitsSaga() {
+export default function* commitsSaga() {
   yield takeLatest(FETCH_COMMITS_REQUEST, getAllCommits);
   yield takeLatest(FETCH_COMMITS_BY_REPOSITORY_REQUEST, getCommitsByRepository);
 }

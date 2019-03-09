@@ -1,18 +1,18 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { logout } from 'sagas/auth';
 import { fetchRepositories, followRepository, fetchUserRepositories } from './repositories';
 import { fetchCommits, fetchCommitsByRepository } from './commits';
-import { postLogout } from './auth';
+import postLogout from './auth';
 
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use((config) => {
   const token = Cookies.get('rfeedtoken');
   if (token != null) {
+    // eslint-disable-next-line no-param-reassign
     config.headers.Authorization = `Token ${token}`;
   }
   return config;
-}, function (err) {
-  return Promise.reject(err);
+}, (err) => {
+  Promise.reject(err);
 });
 
 export {

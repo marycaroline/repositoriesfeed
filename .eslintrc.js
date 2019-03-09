@@ -4,7 +4,17 @@ module.exports = {
     "extends": "airbnb",
     "rules": {
         "jsx-a11y/": 0,
-        "react/jsx-filename-extension": 0
+        "react/jsx-filename-extension": 0,
+        "jsx-a11y/anchor-is-valid": [
+          "error", {
+              "components": [ "a" ]
+          },
+          "error", {
+              "components": [ "Link" ],
+              "specialLink": [ "hrefLeft", "hrefRight" ],
+              "aspects": [ "invalidHref", "preferButton" ]
+          }
+      ]
     },
     "env": {
         "es6": true,
