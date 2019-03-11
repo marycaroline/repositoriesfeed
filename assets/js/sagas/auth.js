@@ -1,16 +1,13 @@
-import { takeLatest, call } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import { LOGOUT } from 'constants/auth';
 import postLogout from 'services/auth';
 import Cookies from 'js-cookie';
 
 function* logout() {
-  try {
-    yield call(postLogout);
-    Cookies.remove('rfeedtoken');
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error);
-  }
+  yield call(postLogout);
+  Cookies.remove('rfeedtoken');
+  yield put(push('/rfeed/login'));
 }
 
 export default function* authSaga() {
